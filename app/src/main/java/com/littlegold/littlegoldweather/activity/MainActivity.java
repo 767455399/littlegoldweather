@@ -1,14 +1,15 @@
-package com.littlegold.littlegoldweather;
+package com.littlegold.littlegoldweather.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseActivity;
+import com.littlegold.littlegoldweather.fragment.MainFragment;
 
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ public class MainActivity extends BaseActivity {
      */
     private static final String requestImg = "http://guolin.tech/api/bing_pic";
     private String imagePath;
-    private ImageView bgImageView;
+    private TabLayout tabLayout;
 
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
@@ -32,7 +33,6 @@ public class MainActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(!TextUtils.isEmpty(String.valueOf(msg.obj))){
-                Glide.with(MainActivity.this).load(msg.obj).placeholder(R.mipmap.ic_launcher).into(bgImageView);
             }
         }
     };
@@ -40,12 +40,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        replaceFragment(MainFragment.newInstance());
     }
 
     @Override
     protected void initView() {
         setContentView(R.layout.activity_main);
-        bgImageView = f(R.id.bgImageView);
     }
 
     @Override
