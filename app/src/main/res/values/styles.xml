@@ -1,0 +1,26 @@
+<resources>
+
+    <!--设置没有状态栏的属性-->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--继承没有状态栏的属性，然后添加各状态栏的颜色-->
+    <style name="BaseAppTheme" parent="AppTheme.Base">
+        <item name="colorPrimary">@color/transparent</item><!-- 状态栏 -->
+        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Base application theme.继承没有状态栏的属性，然后添加各个状态栏的颜色 -->
+    <style name="AppTheme" parent="BaseAppTheme" />
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+</resources>
