@@ -6,11 +6,11 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,11 +32,10 @@ import okhttp3.Response;
  * Created by wangqing on 2018/4/6.
  */
 
-public class ProvinceFragment extends BaseFragment {
-    private static final String TAG = "ProvinceFragment";
+public class CityFragment extends BaseFragment {
     private String path = "http://guolin.tech/api/china";
     private RecyclerView recyclerView;
-    private ProvinceAdapter adapter;
+    private CityAdapter adapter;
     List<ProvinceModel> provinceList = new ArrayList<>();
 
     @Nullable
@@ -49,51 +48,56 @@ public class ProvinceFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        adapter = new ProvinceAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new CityAdapter();
         recyclerView.setAdapter(adapter);
-        loadData();
     }
 
-    public static ProvinceFragment newInstance() {
-        Bundle args = new Bundle();
-        ProvinceFragment fragment = new ProvinceFragment();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!TextUtils.isEmpty(getArguments().getString("id"))) {
+            loadData(getArguments().getString("id"));
+        }
     }
 
-    private void loadData() {
+    private void loadData(String id) {
         OkHttpClient okHttpClient = new OkHttpClient();
-        final Request request = new Request.Builder()
-                .url(path)
-                .get()
+        Request request = new Request.Builder()
+                .url(path + "/" + id)
                 .build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(getContext(), "获取省份失败", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                    provinceList = new Gson().fromJson(response.body().string(), new TypeToken<List<ProvinceModel>>() {}.getType());
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
+            public void onResponse(Call call, Response response) throws IOException {
+                provinceList = new Gson().fromJson(response.body().string(), new TypeToken<List<ProvinceModel>>() {
+                }.getType());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
-
     }
 
-    class ProvinceAdapter extends RecyclerView.Adapter<ViewHolder> {
+    public static CityFragment newInstance(String id) {
+        Bundle args = new Bundle();
+        args.putString("id", id);
+        CityFragment fragment = new CityFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
+    class CityAdapter extends RecyclerView.Adapter<ViewHolder> {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_item_province, parent, false);
-            return new ViewHolder(view);
+            return new ViewHolder(LayoutInflater.from(getContext()).inflate(R.layout.fragment_item_province, parent, false));
         }
 
         @Override
@@ -102,11 +106,10 @@ public class ProvinceFragment extends BaseFragment {
             holder.contentTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    replaceFragmentNeedToBack(CityFragment.newInstance(String.valueOf(provinceList.get(position).id)));
+                    replaceFragmentNeedToBack(AreaFragment.newInstance(getArguments().getString("id")+"/"+String.valueOf(provinceList.get(position).id)));
                 }
             });
         }
-
 
         @Override
         public int getItemCount() {

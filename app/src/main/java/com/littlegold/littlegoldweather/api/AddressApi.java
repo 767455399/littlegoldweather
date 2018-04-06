@@ -6,5 +6,4 @@ package com.littlegold.littlegoldweather.api;
 
 public class AddressApi {
 
-
 }
