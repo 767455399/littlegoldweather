@@ -90,7 +90,12 @@ public class MainFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
-            return WeatherFragment.newInstance(list.get(position).citycode);
+            if(list.size()>0){
+                return WeatherFragment.newInstance(list.get(position).citycode);
+            }else{
+                return null;
+            }
+
         }
 
         @Override
