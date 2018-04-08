@@ -1,21 +1,27 @@
 package com.littlegold.littlegoldweather.fragment;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseFragment;
+import com.littlegold.littlegoldweather.dialog.SureDialog;
 import com.littlegold.littlegoldweather.model.AreaModel;
+import com.littlegold.littlegoldweather.sqlite.MyDatabaseHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +42,7 @@ public class AreaFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private AreaAdapter areaAdapter;
     List<AreaModel> areaList = new ArrayList<>();
+    private MyDatabaseHelper databaseHelper;
 
     @Nullable
     @Override
@@ -50,6 +57,7 @@ public class AreaFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         areaAdapter = new AreaAdapter();
         recyclerView.setAdapter(areaAdapter);
+        databaseHelper=new MyDatabaseHelper(getContext(),"wq.db",null,1);
     }
 
     public static AreaFragment newInstance(String id) {
@@ -67,9 +75,9 @@ public class AreaFragment extends BaseFragment {
     }
 
     private void loadData() {
-        OkHttpClient okHttpClient=new OkHttpClient();
-        Request request=new Request.Builder()
-                .url(path+"/"+getArguments().getString("id"))
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(path + "/" + getArguments().getString("id"))
                 .build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -98,12 +106,25 @@ public class AreaFragment extends BaseFragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
             holder.contentTextView.setText(areaList.get(position).name);
             holder.contentTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    final String name=areaList.get(position).name;
+                    final String cityCode=areaList.get(position).weather_id;
+                    if(!TextUtils.isEmpty(name)&&!TextUtils.isEmpty(cityCode)){
+//                        if (getActivity().hasWindowFocus()) {
+                            new SureDialog(getContext(), new SureDialog.Listener() {
+                                @Override
+                                public void sure() {
+                                    insertData(name,cityCode);
+                                }
+                            }).show();
+//                        }
+                    }else {
+                        Toast.makeText(getContext(), "缺少必要信息", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -112,6 +133,17 @@ public class AreaFragment extends BaseFragment {
         public int getItemCount() {
             return areaList.size();
         }
+    }
+
+    private void insertData(String name,String cityCode) {
+        databaseHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase=databaseHelper.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put("name",name);
+        values.put("citycode",cityCode);
+        sqLiteDatabase.insert("CityCode",null,values);
+        values.clear();
+        getActivity().finish();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

@@ -6,15 +6,22 @@ import android.widget.TextView;
 
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseActivity;
-import com.littlegold.littlegoldweather.fragment.ProvinceFragment;
+import com.littlegold.littlegoldweather.fragment.MainFragment;
+
 
 public class MainActivity extends BaseActivity {
     /**
      * 获取图片
+     * 和风天气数据
+     * 用户ID: HE1804051912321516
+     * 认证key：6eb55f14b38c4ffb94a8806bb5b75328
+     * https://free-api.heweather.com/s6/weather/now?location=CN101190401&key=6eb55f14b38c4ffb94a8806bb5b75328
      */
+
     private static final String requestImg = "http://guolin.tech/api/bing_pic";
     private String imagePath;
     private TextView load;
+
 //    @SuppressLint("HandlerLeak")
 //    Handler handler = new Handler() {
 //        @Override
@@ -28,6 +35,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        replaceFragment(MainFragment.newInstance());
 
     }
 
@@ -38,10 +46,17 @@ public class MainActivity extends BaseActivity {
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(ProvinceFragment.newInstance());
+                replaceFragment(MainFragment.newInstance());
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
 
     @Override
     protected void loadData() {
