@@ -21,6 +21,7 @@ import com.littlegold.littlegoldweather.activity.FragmentHostActivity;
 import com.littlegold.littlegoldweather.base.BaseFragment;
 import com.littlegold.littlegoldweather.model.ListDataModel;
 import com.littlegold.littlegoldweather.sqlite.MyDatabaseHelper;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.List;
  */
 
 public class MainFragment extends BaseFragment {
+    private static final String TAG = "MainFragment";
     private MyDatabaseHelper databaseHelper;
     private List<ListDataModel> list=new ArrayList<>();
     private TabLayout tabLayout;
@@ -80,7 +82,14 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(TAG);
         queryData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     class MainViewPagerAdapter extends FragmentPagerAdapter{

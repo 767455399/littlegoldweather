@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseFragment;
 import com.littlegold.littlegoldweather.model.ProvinceModel;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import okhttp3.Response;
  */
 
 public class CityFragment extends BaseFragment {
+    private static final String TAG = "CityFragment";
     private String path = "http://guolin.tech/api/china";
     private RecyclerView recyclerView;
     private CityAdapter adapter;
@@ -56,9 +58,16 @@ public class CityFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(TAG);
         if (!TextUtils.isEmpty(getArguments().getString("id"))) {
             loadData(getArguments().getString("id"));
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     private void loadData(String id) {

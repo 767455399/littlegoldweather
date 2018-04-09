@@ -17,7 +17,7 @@ import com.littlegold.littlegoldweather.api.WeatherApi;
 import com.littlegold.littlegoldweather.base.BaseFragment;
 import com.littlegold.littlegoldweather.model.InstantWeatherModel;
 import com.littlegold.littlegoldweather.model.NextThreeDaysWeatherModel;
-import com.littlegold.littlegoldweather.tool.ServerConfig;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +36,7 @@ import retrofit2.Retrofit;
  */
 
 public class WeatherFragment extends BaseFragment {
-    //当天及时天气预报
-    private String path = ServerConfig.WEATHER_URL + "now?key=6eb55f14b38c4ffb94a8806bb5b75328&location=";
-    //    未来三天天气预报
-    private String nextThreeDaysPath = ServerConfig.WEATHER_URL + "forecast?key=6eb55f14b38c4ffb94a8806bb5b75328&location=";
+    private static final String TAG = "WeatherFragment";
     private static String CITY_CODE;
     private InstantWeatherModel instantWeatherModel;
     private RecyclerView recyclerView;
@@ -158,7 +155,14 @@ public class WeatherFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(TAG);
         loadData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     private void loadData() {

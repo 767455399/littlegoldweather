@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseActivity;
 import com.littlegold.littlegoldweather.fragment.MainFragment;
+import com.umeng.analytics.MobclickAgent;
 
 
 public class MainActivity extends BaseActivity {
@@ -54,9 +55,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void loadData() {

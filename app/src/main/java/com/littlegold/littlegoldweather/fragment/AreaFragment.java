@@ -22,6 +22,7 @@ import com.littlegold.littlegoldweather.base.BaseFragment;
 import com.littlegold.littlegoldweather.dialog.SureDialog;
 import com.littlegold.littlegoldweather.model.AreaModel;
 import com.littlegold.littlegoldweather.sqlite.MyDatabaseHelper;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import okhttp3.Response;
  */
 
 public class AreaFragment extends BaseFragment {
+    private static final String TAG = "AreaFragment";
     private String path = "http://guolin.tech/api/china";
     private RecyclerView recyclerView;
     private AreaAdapter areaAdapter;
@@ -71,7 +73,14 @@ public class AreaFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(TAG);
         loadData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     private void loadData() {

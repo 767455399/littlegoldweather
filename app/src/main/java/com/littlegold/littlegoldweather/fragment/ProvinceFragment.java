@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseFragment;
 import com.littlegold.littlegoldweather.model.ProvinceModel;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,6 +61,18 @@ public class ProvinceFragment extends BaseFragment {
         ProvinceFragment fragment = new ProvinceFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     private void loadData() {
