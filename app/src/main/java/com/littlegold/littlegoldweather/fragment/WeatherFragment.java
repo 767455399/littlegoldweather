@@ -1,20 +1,20 @@
 package com.littlegold.littlegoldweather.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.api.WeatherApi;
 import com.littlegold.littlegoldweather.base.BaseFragment;
+import com.littlegold.littlegoldweather.dialog.CommonLoadingDialog;
 import com.littlegold.littlegoldweather.model.InstantWeatherModel;
 import com.littlegold.littlegoldweather.model.NextThreeDaysWeatherModel;
 import com.umeng.analytics.MobclickAgent;
@@ -39,6 +39,7 @@ public class WeatherFragment extends BaseFragment {
     private static final String TAG = "WeatherFragment";
     private static String CITY_CODE;
     private InstantWeatherModel instantWeatherModel;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private WeatherAdapter adapter;
     public static final int ITEM_HEAD = 0;
@@ -50,6 +51,7 @@ public class WeatherFragment extends BaseFragment {
     public List<NextThreeDaysWeatherModel.HeWeather6Bean.DailyForecastBean> threeDayWeatherList = new ArrayList<>();
     public List<InstantWeatherModel.HeWeather6Bean> instantList = new ArrayList<>();
     private int weatherListLength;
+    private FloatingActionButton floatingActionButton;
 
     @Nullable
     @Override
@@ -69,11 +71,25 @@ public class WeatherFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
         gridLayoutManager.setSpanSizeLookup(new AutoSpanSizeLookUp());
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new WeatherAdapter();
         recyclerView.setAdapter(adapter);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(ProvinceFragment.newInstance());
+            }
+        });
 
 //
     }
@@ -100,7 +116,7 @@ public class WeatherFragment extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof RecordViewHolder) {
                 final RecordViewHolder recordViewHolder = (RecordViewHolder) holder;
-                int positions=position-1;
+                int positions = position - 1;
                 if (2 == positions) {
                     recordViewHolder.dayTextView.setText("后天");
                 } else if (1 == positions) {
@@ -121,9 +137,9 @@ public class WeatherFragment extends BaseFragment {
                     headViewHolder.companyTextView.setText("℃");
                     headViewHolder.weatherTextView.setText(nowBean.cond_txt);
                     headViewHolder.windDirectionTextView.setText(nowBean.wind_dir);
-                    headViewHolder.windPowerTextView.setText(nowBean.wind_sc);
-                    headViewHolder.relativeHumidityTextView.setText(nowBean.hum);
-                    headViewHolder.SomatosensoryTemperatureTextView.setText(nowBean.fl);
+                    headViewHolder.windPowerTextView.setText(nowBean.wind_sc+"级");
+                    headViewHolder.relativeHumidityTextView.setText(nowBean.hum+"%");
+                    headViewHolder.SomatosensoryTemperatureTextView.setText(nowBean.fl+"℃");
                 }
             } else if (holder instanceof NoRecordViewHolder) {
 
@@ -166,6 +182,7 @@ public class WeatherFragment extends BaseFragment {
     }
 
     private void loadData() {
+        CommonLoadingDialog.show(getActivity());
         WeatherApi.getInstantWeather(getArguments().getString(CITY_CODE)).flatMap(new Function<InstantWeatherModel, Observable<NextThreeDaysWeatherModel>>() {
             @Override
             public Observable<NextThreeDaysWeatherModel> apply(InstantWeatherModel instantWeatherModels) throws Exception {
@@ -180,9 +197,10 @@ public class WeatherFragment extends BaseFragment {
 
             @Override
             public void onNext(NextThreeDaysWeatherModel nextThreeDaysWeatherModel) {
+                CommonLoadingDialog.hide();
                 weatherListLength = threeDayWeatherList.size() + instantList.size();
-                weatherListLength=3;
-                Toast.makeText(getActivity(), weatherListLength+"******"+threeDayWeatherList.size()+"****"+instantList.size(), Toast.LENGTH_SHORT).show();
+//                weatherListLength = 3;
+//                Toast.makeText(getActivity(), weatherListLength + "******" + threeDayWeatherList.size() + "****" + instantList.size(), Toast.LENGTH_SHORT).show();
                 threeDayWeatherList = nextThreeDaysWeatherModel.HeWeather6.get(0).daily_forecast;
                 adapter.notifyDataSetChanged();
             }
@@ -190,12 +208,18 @@ public class WeatherFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-
+                CommonLoadingDialog.hide();
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
 
             @Override
             public void onComplete() {
-
+                CommonLoadingDialog.hide();
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
 
@@ -266,53 +290,5 @@ public class WeatherFragment extends BaseFragment {
         }
     }
 
-//    private void loadData() {
-//        String cityCode = getArguments().getString("cityCode");
-//        if (TextUtils.isEmpty(cityCode)) {
-//            return;
-//        }
-//        OkHttpClient okHttpClient = new OkHttpClient();
-//        Request request = new Request.Builder()
-//                .url(path + cityCode)
-//                .build();
-//        okHttpClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Toast.makeText(getContext(), "获取天气失败", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String weatherData = response.body().string();
-//                instantWeatherModel = new Gson().fromJson(weatherData, InstantWeatherModel.class);
-//                if (!TextUtils.isEmpty(weatherData)) {
-//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            refreshUI();
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//
-//    }
 
-
-    private void refreshUI() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                InstantWeatherModel.HeWeather6Bean.NowBean nowBean = instantWeatherModel.HeWeather6.get(0).now;
-//                addressTextView.setText(instantWeatherModel.HeWeather6.get(0).basic.parent_city + "~" + instantWeatherModel.HeWeather6.get(0).basic.location);
-//                temperatureTextView.setText(nowBean.tmp);
-//                companyTextView.setText("℃");
-//                weatherTextView.setText(nowBean.cond_txt);
-//                windDirectionTextView.setText(nowBean.wind_dir);
-//                windPowerTextView.setText(nowBean.wind_sc);
-//                relativeHumidityTextView.setText(nowBean.hum);
-//                SomatosensoryTemperatureTextView.setText(nowBean.fl);
-            }
-        });
-    }
 }

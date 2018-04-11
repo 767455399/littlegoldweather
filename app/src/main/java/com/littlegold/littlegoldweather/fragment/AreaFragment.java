@@ -124,7 +124,7 @@ public class AreaFragment extends BaseFragment {
                     final String cityCode=areaList.get(position).weather_id;
                     if(!TextUtils.isEmpty(name)&&!TextUtils.isEmpty(cityCode)){
 //                        if (getActivity().hasWindowFocus()) {
-                            new SureDialog(getContext(), new SureDialog.Listener() {
+                            new SureDialog(getContext(),name, new SureDialog.Listener() {
                                 @Override
                                 public void sure() {
                                     insertData(name,cityCode);
@@ -152,6 +152,7 @@ public class AreaFragment extends BaseFragment {
         values.put("citycode",cityCode);
         sqLiteDatabase.insert("CityCode",null,values);
         values.clear();
+        replaceFragment(MainFragment.newInstance());
         getActivity().finish();
     }
 

@@ -13,19 +13,21 @@
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:gravity="center"
-        android:text="权限请求"
+        android:text="提示"
         android:textColor="@color/black_text"
-        android:textSize="22dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/contentTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:textColor="@color/black_text"
         android:textSize="14dp"
-        tools:text="&#160;&#160;&#160;&#160;请在设置-应用-wq-权限中开启电话权限，以正常使用网络访问、拨打客服热线等功能" />
+        tools:text="&#160;&#160;&#160;&#160;请在设置-应用-wq-权限中开启电话权限" />
 
     <View
         android:id="@+id/spliteView"
@@ -48,23 +50,24 @@
             android:id="@+id/cancleTextView"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:gravity="center"
             android:text="取消"
             android:textColor="@color/black_text"
-            android:textSize="18dp" />
+            android:textSize="14dp" />
 
         <View
             android:id="@+id/centerSpliteView"
             android:layout_width="1px"
-            android:layout_height="50dp"
+            android:layout_height="35dp"
             android:background="@color/black_text" />
 
         <TextView
             android:id="@+id/sureTextView"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
+            android:textSize="14dp"
             android:gravity="center"
             android:text="确定" />
 

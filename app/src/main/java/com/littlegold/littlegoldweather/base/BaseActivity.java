@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 
+import com.umeng.message.PushAgent;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -13,6 +15,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initView();
         loadData();
+        PushAgent.getInstance(getApplicationContext()).onAppStart();
     }
 
     protected abstract void initView();

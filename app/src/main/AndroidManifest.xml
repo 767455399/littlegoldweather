@@ -3,10 +3,11 @@
     package="com.littlegold.littlegoldweather">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".base.BaseApplication"
@@ -16,10 +17,23 @@
         android:roundIcon="@mipmap/tianqi_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <meta-data android:value="5aca21a2f43e483abb000237"
-            android:name="UMENG_APPKEY"/>
-        <meta-data android:value="LittleGoldUmeng"
-            android:name="UMENG_CHANNEL"/>
+        
+        <!--<provider-->
+            <!--android:authorities="${com.littlegold.littlegoldweather}.fileprovider"-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:grantUriPermissions="true"-->
+            <!--android:exported="false">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/filepaths"/>-->
+        <!--</provider>-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5aca21a2f43e483abb000237" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="LittleGoldUmeng" />
+
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +42,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".base.BaseActivity" />
-        <activity android:name=".activity.FragmentHostActivity"></activity>
+        <activity android:name=".activity.FragmentHostActivity" />
+        <activity android:name=".activity.UpdateAppActivity"></activity>
     </application>
 
 </manifest>

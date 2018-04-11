@@ -19,14 +19,14 @@ import com.littlegold.littlegoldweather.R;
  */
 
 public class SureDialog extends Dialog {
-    public SureDialog(@NonNull Context context, final Listener listener) {
+    public SureDialog(@NonNull Context context,String city, final Listener listener) {
         super(context, R.style.WqDialogStyle);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setGravity(Gravity.CENTER);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_sure, null);
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
         TextView contentTextView = (TextView) view.findViewById(R.id.contentTextView);
-        contentTextView.setText("您确定要添加该城市天气预报？");
+        contentTextView.setText("您确定要添加"+city+"的天气预报？");
         TextView cancleTextView = (TextView) view.findViewById(R.id.cancleTextView);
         TextView sureTextView = (TextView) view.findViewById(R.id.sureTextView);
         cancleTextView.setOnClickListener(new View.OnClickListener() {

@@ -76,7 +76,13 @@ public class MainFragment extends BaseFragment {
         viewPager=(ViewPager)view.findViewById(R.id.viewPager);
         adapter=new MainViewPagerAdapter(getChildFragmentManager());
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
+        if (list.size() > 5) {
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        } else {
+            tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
     }
 
     @Override
@@ -122,6 +128,7 @@ public class MainFragment extends BaseFragment {
         SQLiteDatabase sqLiteDatabase=databaseHelper.getWritableDatabase();
         //查询表中所有数据
         Cursor cursor=sqLiteDatabase.query("CityCode",null,null,null,null,null,null);
+        list.clear();
         if(cursor.moveToFirst()){
             do{
                 ListDataModel listDataModel=new ListDataModel();

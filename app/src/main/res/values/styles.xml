@@ -31,5 +31,12 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="Common.Dialog.Base.Center" parent="Base.V7.Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowBackground">@color/common_transparent</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
 
 </resources>
