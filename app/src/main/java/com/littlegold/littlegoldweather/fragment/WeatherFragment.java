@@ -28,11 +28,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
 
 /**
  * Created by wangqing on 2018/4/5.
+ * 天气主界面
  */
 
 public class WeatherFragment extends BaseFragment {
@@ -46,10 +45,7 @@ public class WeatherFragment extends BaseFragment {
     public static final int ITEM_RECORD = 1;
     public static final int ITEM_NO_RECORD = 2;
     public static final int ITEM_FOOTER = 3;
-    private Retrofit retrofit;
-    private OkHttpClient.Builder builder;
     public List<NextThreeDaysWeatherModel.HeWeather6Bean.DailyForecastBean> threeDayWeatherList = new ArrayList<>();
-    public List<InstantWeatherModel.HeWeather6Bean> instantList = new ArrayList<>();
     private int weatherListLength;
     private FloatingActionButton floatingActionButton;
 
@@ -198,9 +194,7 @@ public class WeatherFragment extends BaseFragment {
             @Override
             public void onNext(NextThreeDaysWeatherModel nextThreeDaysWeatherModel) {
                 CommonLoadingDialog.hide();
-                weatherListLength = threeDayWeatherList.size() + instantList.size();
-//                weatherListLength = 3;
-//                Toast.makeText(getActivity(), weatherListLength + "******" + threeDayWeatherList.size() + "****" + instantList.size(), Toast.LENGTH_SHORT).show();
+                weatherListLength = nextThreeDaysWeatherModel.HeWeather6.get(0).daily_forecast.size()+ instantWeatherModel.HeWeather6.size()-1;
                 threeDayWeatherList = nextThreeDaysWeatherModel.HeWeather6.get(0).daily_forecast;
                 adapter.notifyDataSetChanged();
             }

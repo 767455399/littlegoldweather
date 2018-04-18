@@ -36,6 +36,7 @@ import okhttp3.Response;
 
 /**
  * Created by wangqing on 2018/4/6.
+ * 区
  */
 
 public class AreaFragment extends BaseFragment {
