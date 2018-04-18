@@ -8,14 +8,38 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        flavorDimensions "versionCode"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets {
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     buildTypes {
         release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //启用代码混淆
             minifyEnabled false
+            //压缩对齐生成的apk包
+            zipAlignEnabled true
+            //移除无用的资源文件,使用的时候会导致部分资源图片加载不出来。除非在代码中引用。
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+//    productFlavors {
+//        qihoo {
+//            applicationId "com.littlegold.littlegoldweather.android.qihoo"
+//        }
+//        yingyongbao {
+//            applicationId "com.littlegold.littlegoldweather.android.yingyongbao"
+//        }
+//    }
 }
 
 dependencies {
@@ -43,4 +67,5 @@ dependencies {
     compile 'com.umeng.sdk:utdid:1.1.5.3'
     //PushSDK
     compile 'com.umeng.sdk:push:4.1.0'
+    compile files('libs/Msc.jar')
 }

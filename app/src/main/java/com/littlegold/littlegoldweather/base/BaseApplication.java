@@ -2,8 +2,10 @@ package com.littlegold.littlegoldweather.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Looper;
 import android.util.Log;
 
+import com.iflytek.cloud.SpeechUtility;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -22,6 +24,15 @@ public class BaseApplication extends Application {
         applicationContext = getApplicationContext();
         UMConfigure.init(this,"5aca21a2f43e483abb000237","LittleGoldUmeng",UMConfigure.DEVICE_TYPE_PHONE,"1339801b735a6da98c46e20fed966ce4");
         registerUMPush();
+        //科大讯飞初始化
+      //  Setting.setShowLog(true); //设置日志开关（默认为true），设置成false时关闭语音云SDK日志打印
+        new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                SpeechUtility.createUtility(applicationContext, "appid=5ad5ee1e");//=号后面写自己应用的APPID
+            }
+        });
+
     }
 
     private void registerUMPush() {

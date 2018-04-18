@@ -10,7 +10,6 @@
         android:id="@+id/load"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:visibility="gone"
         android:gravity="center"
         android:text="这是下载的apk"/>
 
