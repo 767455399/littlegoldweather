@@ -1,16 +1,21 @@
 package com.littlegold.littlegoldweather.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.api.WeatherApi;
 import com.littlegold.littlegoldweather.base.BaseFragment;
@@ -72,6 +77,7 @@ public class WeatherFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 loadData();
+                updatePic();
             }
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
@@ -88,6 +94,10 @@ public class WeatherFragment extends BaseFragment {
         });
 
 //
+    }
+
+    private void updatePic() {
+
     }
 
     class WeatherAdapter extends RecyclerView.Adapter {
@@ -136,6 +146,14 @@ public class WeatherFragment extends BaseFragment {
                     headViewHolder.windPowerTextView.setText(nowBean.wind_sc+"级");
                     headViewHolder.relativeHumidityTextView.setText(nowBean.hum+"%");
                     headViewHolder.SomatosensoryTemperatureTextView.setText(nowBean.fl+"℃");
+                    SharedPreferences sharedPreferences=getActivity().getSharedPreferences("pic", Context.MODE_PRIVATE);
+                    String imgUrl=sharedPreferences.getString("pic","");
+                    if(!TextUtils.isEmpty(imgUrl)){
+                        Glide.with(getActivity()).load(imgUrl).error(R.mipmap.weather_bg).placeholder(R.mipmap.weather_bg).into(headViewHolder.imageView);
+                    }else{
+                        headViewHolder.imageView.setImageResource(R.mipmap.weather_bg);
+                    }
+
                 }
             } else if (holder instanceof NoRecordViewHolder) {
 
@@ -222,6 +240,7 @@ public class WeatherFragment extends BaseFragment {
     class HeadViewHolder extends RecyclerView.ViewHolder {
         private TextView addressTextView, temperatureTextView, weatherTextView, companyTextView,
                 windDirectionTextView, windPowerTextView, relativeHumidityTextView, SomatosensoryTemperatureTextView;
+        private ImageView imageView;
 
         public HeadViewHolder(View itemView) {
             super(itemView);
@@ -234,6 +253,7 @@ public class WeatherFragment extends BaseFragment {
             SomatosensoryTemperatureTextView = (TextView) itemView.findViewById(R.id.SomatosensoryTemperatureTextView);
             addressTextView = (TextView) itemView.findViewById(R.id.addressTextView);
             companyTextView = (TextView) itemView.findViewById(R.id.companyTextView);
+            imageView=(ImageView)itemView.findViewById(R.id.imageView);
         }
     }
 
