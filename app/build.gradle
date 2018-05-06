@@ -6,6 +6,8 @@ android {
         applicationId "com.littlegold.littlegoldweather"
         minSdkVersion 15
         targetSdkVersion 26
+        //只打包中文资源。
+        resConfigs "zh-rCN"
         versionCode 1
         versionName "1.0"
         flavorDimensions "versionCode"
@@ -13,7 +15,7 @@ android {
     }
 
     sourceSets {
-        main{
+        main {
             jniLibs.srcDirs = ['libs']
         }
     }
