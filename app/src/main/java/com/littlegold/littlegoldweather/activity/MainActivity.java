@@ -1,6 +1,7 @@
 package com.littlegold.littlegoldweather.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.iflytek.cloud.SpeechUtility;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseActivity;
+import com.littlegold.littlegoldweather.fragment.MainFragment;
+import com.littlegold.littlegoldweather.service.AutoUpdateService;
 import com.littlegold.littlegoldweather.voice.TTSUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -41,6 +44,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent=new Intent(MainActivity.this, AutoUpdateService.class);
+        startService(intent);
 //        replaceFragment(MainFragment.newInstance());
 
     }
@@ -53,11 +58,11 @@ public class MainActivity extends BaseActivity {
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SpeechUtility.createUtility(MainActivity.this, "appid=5ad5ee1e");//=号后面写自己应用的APPID
-                TTSUtils.getInstance().speak("这是一个小故事");
+//                SpeechUtility.createUtility(MainActivity.this, "appid=5ad5ee1e");//=号后面写自己应用的APPID
+//                TTSUtils.getInstance().speak("这是一个小故事");
 
 //                startActivity(new Intent(MainActivity.this, SpeakActivity.class));
-//                replaceFragment(MainFragment.newInstance());
+                replaceFragment(MainFragment.newInstance());
             }
         });
     }
