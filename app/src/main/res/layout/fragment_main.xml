@@ -10,6 +10,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/horseRaceLampTextView"
+            android:layout_width="match_parent"
+            android:background="#123456"
+            android:textColor="#ffffff"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="天气预报持续更新中，后续将会有更多功能，尽请期待！天气预报持续更新中，后续将会有更多功能，尽请期待！天气预报持续更新中，后续将会有更多功能，尽请期待！"
+            android:gravity="center_vertical"
+            android:layout_height="30dp" />
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"

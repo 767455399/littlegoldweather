@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.iflytek.cloud.SpeechUtility;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseActivity;
+import com.littlegold.littlegoldweather.fragment.MainFragment;
 import com.littlegold.littlegoldweather.voice.TTSUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -57,7 +58,7 @@ public class MainActivity extends BaseActivity {
                 TTSUtils.getInstance().speak("这是一个小故事");
 
 //                startActivity(new Intent(MainActivity.this, SpeakActivity.class));
-//                replaceFragment(MainFragment.newInstance());
+                replaceFragment(MainFragment.newInstance());
             }
         });
     }

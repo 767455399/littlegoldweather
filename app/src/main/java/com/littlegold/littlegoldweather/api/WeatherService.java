@@ -1,6 +1,7 @@
 package com.littlegold.littlegoldweather.api;
 
 import com.littlegold.littlegoldweather.model.InstantWeatherModel;
+import com.littlegold.littlegoldweather.model.LifeIndexModel;
 import com.littlegold.littlegoldweather.model.NextThreeDaysWeatherModel;
 
 import io.reactivex.Observable;
@@ -24,4 +25,10 @@ public interface WeatherService {
      */
     @GET("now?key=6eb55f14b38c4ffb94a8806bb5b75328")
     Observable<InstantWeatherModel> getInstantWeather(@Query("location")String cityCode);
+
+    /**
+     * 天气指数
+     */
+    @GET("lifestyle?key=6eb55f14b38c4ffb94a8806bb5b75328")
+   Observable<LifeIndexModel>getLifeIndex(@Query("location")String cityCode);
 }

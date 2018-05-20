@@ -2,6 +2,7 @@ package com.littlegold.littlegoldweather.api;
 
 import com.littlegold.littlegoldweather.http.RetrofitClient;
 import com.littlegold.littlegoldweather.model.InstantWeatherModel;
+import com.littlegold.littlegoldweather.model.LifeIndexModel;
 import com.littlegold.littlegoldweather.model.NextThreeDaysWeatherModel;
 import com.littlegold.littlegoldweather.tool.ServerConfig;
 
@@ -21,5 +22,10 @@ public class WeatherApi {
     public static Observable<InstantWeatherModel>getInstantWeather(String cityCode){
         return RetrofitClient.getRetrofitBuilder(ServerConfig.WEATHER_URL).build()
                 .create(WeatherService.class).getInstantWeather(cityCode);
+    }
+
+    public static Observable<LifeIndexModel>getLifeIndex(String cityCode){
+        return RetrofitClient.getRetrofitBuilder(ServerConfig.WEATHER_URL).build()
+                .create(WeatherService.class).getLifeIndex(cityCode);
     }
 }
