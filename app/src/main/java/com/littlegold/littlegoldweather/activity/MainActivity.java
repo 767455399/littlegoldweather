@@ -9,12 +9,9 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.TextView;
 
-import com.iflytek.cloud.SpeechUtility;
 import com.littlegold.littlegoldweather.R;
 import com.littlegold.littlegoldweather.base.BaseActivity;
-import com.littlegold.littlegoldweather.fragment.MainFragment;
 import com.littlegold.littlegoldweather.service.AutoUpdateService;
-import com.littlegold.littlegoldweather.voice.TTSUtils;
 import com.umeng.analytics.MobclickAgent;
 
 
@@ -58,11 +55,13 @@ public class MainActivity extends BaseActivity {
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FileActivity.class));
+
 //                SpeechUtility.createUtility(MainActivity.this, "appid=5ad5ee1e");//=号后面写自己应用的APPID
 //                TTSUtils.getInstance().speak("这是一个小故事");
 
-//                startActivity(new Intent(MainActivity.this, SpeakActivity.class));
-                replaceFragment(MainFragment.newInstance());
+//                startActivity(new Intent(MainActivity.this, FileActivity.class));
+//                replaceFragment(MainFragment.newInstance());
             }
         });
     }
